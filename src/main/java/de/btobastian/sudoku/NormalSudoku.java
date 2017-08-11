@@ -33,7 +33,7 @@ public class NormalSudoku extends Sudoku {
     }
 
     /*
-     * For a normal sudoku the field numbers are map in the following way:
+     * For a normal sudoku the field numbers are mapped in the following way:
      * +-----+-----+
      * | 0  1| 2  3|
      * | 4  5| 6  7|
