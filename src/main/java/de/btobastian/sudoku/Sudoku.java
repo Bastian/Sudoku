@@ -92,4 +92,11 @@ public abstract class Sudoku {
      */
     public abstract Sudoku solve();
 
+    /**
+     * Checks if the sudoku has exactly one solution.
+     *
+     * @return Whether the sudoku has exactly one solution or not.
+     */
+    public abstract boolean hasUniqueSolution();
+
 }

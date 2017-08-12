@@ -16,6 +16,51 @@ public class NormalSudoku extends Sudoku {
         this.matrix = new int[size.getNormalSize()][size.getNormalSize()];
     }
 
+    /**
+     * Creates a normal sudoku from the given matrix.
+     * The matrix first index of the matrix represents the row, the second one the column.
+     * The matrix can have the following sizes: 4x4, 9x9, 16x16, 25x25, 36x36 or 49x49.
+     * Zeros in the matrix represents empty slots.
+     *
+     * @param matrix The matrix.
+     * @return A normal sudoku for the given matrix.
+     */
+    public static NormalSudoku createSudokuFromMatrix(int[][] matrix) {
+        SudokuSize size = null;
+        switch (matrix.length) {
+            case 4:
+                size = SudokuSize.TINY;
+                break;
+            case 9:
+                size = SudokuSize.NORMAL;
+                break;
+            case 16:
+                size = SudokuSize.LARGE;
+                break;
+            case 25:
+                size = SudokuSize.HUGE;
+                break;
+            case 36:
+                size = SudokuSize.EXTREME;
+                break;
+            case 49:
+                size = SudokuSize.ENORMOUS;
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid matrix size!");
+        }
+
+        for (int[] row : matrix) {
+            if (row.length != size.getNormalSize()) {
+                throw new IllegalArgumentException("Invalid matrix size!");
+            }
+        }
+
+        NormalSudoku sudoku = new NormalSudoku(size);
+        sudoku.matrix = matrix;
+        return sudoku.clone();
+    }
+
     @Override
     public NormalSudoku clone() {
         NormalSudoku sudoku = new NormalSudoku(getSize());
@@ -54,7 +99,42 @@ public class NormalSudoku extends Sudoku {
 
     @Override
     public NormalSudoku solve() {
-        int[][] matrix = this.matrix;
+        Stack<int[][]> stack = solve(matrix);
+        if (!stack.isEmpty()) {
+            NormalSudoku sudoku = new NormalSudoku(getSize());
+            sudoku.matrix = stack.pop();
+            return sudoku;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public boolean hasUniqueSolution() {
+        Stack<int[][]> stack = solve(matrix);
+        return stack.size() == 1;
+    }
+
+    /**
+     * Gets the numbers in the given block.
+     * A block number is mapped the same way, as field numbers.
+     *
+     * @param block The number of the block.
+     * @return The values inside the block.
+     */
+    public int[][] getBlock(int block) {
+        return getBlock(block, matrix);
+    }
+
+    /**
+     * Solves the given matrix.
+     *
+     * @param matrix The matrix to solve.
+     * @return A stack where the top element is the solved matrix.
+     *         If the stack is empty, there's no solution.
+     *         If the stack has more than 1 element, it has more than one possible solution.
+     */
+    private Stack<int[][]> solve(int[][] matrix) {
         Stack<int[][]> stack = new Stack<int[][]>();
         stack.push(matrix);
         outer: while (!stack.isEmpty()) {
@@ -77,22 +157,10 @@ public class NormalSudoku extends Sudoku {
                 }
             }
             // All fields are filled
-            NormalSudoku sudoku = new NormalSudoku(getSize());
-            sudoku.matrix = matrix;
-            return sudoku;
+            stack.push(matrix);
+            return stack;
         }
-        return null;
-    }
-
-    /**
-     * Gets the numbers in the given block.
-     * A block number is mapped the same way, as field numbers.
-     *
-     * @param block The number of the block.
-     * @return The values inside the block.
-     */
-    public int[][] getBlock(int block) {
-        return getBlock(block, matrix);
+        return stack;
     }
 
     /**
