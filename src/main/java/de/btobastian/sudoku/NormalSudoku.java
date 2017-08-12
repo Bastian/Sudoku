@@ -92,18 +92,7 @@ public class NormalSudoku extends Sudoku {
      * @return The values inside the block.
      */
     public int[][] getBlock(int block) {
-        int column = block % (int) Math.sqrt(getSize().getNormalSize());
-        int row = block / (int) Math.sqrt(getSize().getNormalSize());
-        if (row > Math.sqrt(getSize().getNormalSize()) || block < 0) {
-            throw new IllegalArgumentException("Invalid block number!");
-        }
-        int[][] fields = new int[(int) Math.sqrt(getSize().getNormalSize())][(int) Math.sqrt(getSize().getNormalSize())];
-        for (int i = 0; i < Math.sqrt(getSize().getNormalSize()); i++) {
-            for (int j = 0; j < Math.sqrt(getSize().getNormalSize()); j++) {
-                fields[i][j] = matrix[row * (int) Math.sqrt(getSize().getNormalSize()) + i][column * (int) Math.sqrt(getSize().getNormalSize()) + j];
-            }
-        }
-        return fields;
+        return getBlock(block, matrix);
     }
 
     /**
@@ -128,7 +117,7 @@ public class NormalSudoku extends Sudoku {
         // Check if there is already this number in the block
         int blockColumn = column / (int) Math.sqrt(getSize().getNormalSize());
         int blockRow = row / (int) Math.sqrt(getSize().getNormalSize());
-        int[][] blockFields = getBlock(blockRow * (int) Math.sqrt(getSize().getNormalSize()) + blockColumn);
+        int[][] blockFields = getBlock(blockRow * (int) Math.sqrt(getSize().getNormalSize()) + blockColumn, matrix);
         for (int i = 0; i < blockFields.length; i++) {
             for (int j = 0; j < blockFields[i].length; j++) {
                 if (blockFields[i][j] == number) {
@@ -153,6 +142,29 @@ public class NormalSudoku extends Sudoku {
 
         // It passed all checks, so it's a valid move
         return true;
+    }
+
+    /**
+     * Gets the numbers in the given block.
+     * A block number is mapped the same way, as field numbers.
+     *
+     * @param block The number of the block.
+     * @param matrix The matrix to check.
+     * @return The values inside the block.
+     */
+    private int[][] getBlock(int block, int[][] matrix) {
+        int column = block % (int) Math.sqrt(getSize().getNormalSize());
+        int row = block / (int) Math.sqrt(getSize().getNormalSize());
+        if (row > Math.sqrt(getSize().getNormalSize()) || block < 0) {
+            throw new IllegalArgumentException("Invalid block number!");
+        }
+        int[][] fields = new int[(int) Math.sqrt(getSize().getNormalSize())][(int) Math.sqrt(getSize().getNormalSize())];
+        for (int i = 0; i < Math.sqrt(getSize().getNormalSize()); i++) {
+            for (int j = 0; j < Math.sqrt(getSize().getNormalSize()); j++) {
+                fields[i][j] = matrix[row * (int) Math.sqrt(getSize().getNormalSize()) + i][column * (int) Math.sqrt(getSize().getNormalSize()) + j];
+            }
+        }
+        return fields;
     }
 
     /**
