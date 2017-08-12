@@ -211,35 +211,36 @@ public class NormalSudoku extends Sudoku {
             if (row % Math.sqrt(getSize().getNormalSize()) == 0) {
                 for (int column = 0; column < getSize().getNormalSize(); column++) {
                     if (column % Math.sqrt(getSize().getNormalSize()) == 0) {
-                        strBuilder.append("+");
+                        strBuilder.append(column == 0 ? "+" : "-+");
                     }
-                    strBuilder.append("-");
+                    strBuilder.append("--");
                 }
-                strBuilder.append("+");
+                strBuilder.append("-+");
                 strBuilder.append("\n");
             }
 
             for (int column = 0; column < getSize().getNormalSize(); column++) {
                 // Generate the vertical separation lines between the blocks
                 if (column % Math.sqrt(getSize().getNormalSize()) == 0) {
-                    strBuilder.append("|");
+                    strBuilder.append(column == 0 ? "|" :" |");
                 }
                 // Append the content of the field.
+                strBuilder.append(" ");
                 strBuilder.append(matrix[row][column] == 0 ? " " : encodeNumber(matrix[row][column]));
             }
             // Append the last vertical separation line
-            strBuilder.append("|");
+            strBuilder.append(" |");
             strBuilder.append("\n");
         }
 
         // Generate the last horizontal separation line
         for (int column = 0; column < getSize().getNormalSize(); column++) {
             if (column % Math.sqrt(getSize().getNormalSize()) == 0) {
-                strBuilder.append("+");
+                strBuilder.append(column == 0 ? "+" : "-+");
             }
-            strBuilder.append("-");
+            strBuilder.append("--");
         }
-        strBuilder.append("+");
+        strBuilder.append("-+");
         return strBuilder.toString();
     }
 
