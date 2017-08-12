@@ -168,6 +168,22 @@ public class NormalSudoku extends Sudoku {
     }
 
     /**
+     * Encodes numbers larger than 9 to letters (10 -> A, 11 -> B, ...)
+     * @param number The number to encode.
+     */
+    private char encodeNumber(int number) {
+        if (number < 0) {
+            throw new IllegalArgumentException("Negative numbers are not allowed!");
+        }
+
+        if (number >= 0 && number <= 9) {
+            return (char) ('0' + number);
+        }
+
+        return (char) ('A' + (number-10));
+    }
+
+    /**
      * Generates an output which may look like this.
      * Requires a monospace font to look good.
      *
@@ -209,7 +225,7 @@ public class NormalSudoku extends Sudoku {
                     strBuilder.append("|");
                 }
                 // Append the content of the field.
-                strBuilder.append(matrix[row][column] == 0 ? " " : matrix[row][column]);
+                strBuilder.append(matrix[row][column] == 0 ? " " : encodeNumber(matrix[row][column]));
             }
             // Append the last vertical separation line
             strBuilder.append("|");
