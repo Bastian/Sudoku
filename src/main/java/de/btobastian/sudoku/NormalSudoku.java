@@ -135,6 +135,7 @@ public class NormalSudoku extends Sudoku {
      *         If the stack has more than 1 element, it has more than one possible solution.
      */
     private Stack<int[][]> solve(int[][] matrix) {
+        Stack<int[][]> solvedStack = new Stack<int[][]>();
         Stack<int[][]> stack = new Stack<int[][]>();
         stack.push(matrix);
         outer: while (!stack.isEmpty()) {
@@ -157,10 +158,9 @@ public class NormalSudoku extends Sudoku {
                 }
             }
             // All fields are filled
-            stack.push(matrix);
-            return stack;
+            solvedStack.push(matrix);
         }
-        return stack;
+        return solvedStack;
     }
 
     /**
