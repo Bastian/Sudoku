@@ -186,9 +186,9 @@ public class NormalSudoku extends Sudoku {
         int blockColumn = column / (int) Math.sqrt(getSize().getNormalSize());
         int blockRow = row / (int) Math.sqrt(getSize().getNormalSize());
         int[][] blockFields = getBlock(blockRow * (int) Math.sqrt(getSize().getNormalSize()) + blockColumn, matrix);
-        for (int i = 0; i < blockFields.length; i++) {
-            for (int j = 0; j < blockFields[i].length; j++) {
-                if (blockFields[i][j] == number) {
+        for (int[] blockField : blockFields) {
+            for (int j = 0; j < blockField.length; j++) {
+                if (blockField[j] == number) {
                     return false;
                 }
             }
@@ -228,8 +228,12 @@ public class NormalSudoku extends Sudoku {
         }
         int[][] fields = new int[(int) Math.sqrt(getSize().getNormalSize())][(int) Math.sqrt(getSize().getNormalSize())];
         for (int i = 0; i < Math.sqrt(getSize().getNormalSize()); i++) {
-            for (int j = 0; j < Math.sqrt(getSize().getNormalSize()); j++) {
-                fields[i][j] = matrix[row * (int) Math.sqrt(getSize().getNormalSize()) + i][column * (int) Math.sqrt(getSize().getNormalSize()) + j];
+            if (Math.sqrt(getSize().getNormalSize()) >= 0) {
+                System.arraycopy(
+                        matrix[row * (int) Math.sqrt(getSize().getNormalSize()) + i],
+                        column * (int) Math.sqrt(getSize().getNormalSize()), fields[i],
+                        0, (int) Math.sqrt(getSize().getNormalSize())
+                );
             }
         }
         return fields;
@@ -244,7 +248,7 @@ public class NormalSudoku extends Sudoku {
             throw new IllegalArgumentException("Negative numbers are not allowed!");
         }
 
-        if (number >= 0 && number <= 9) {
+        if (number <= 9) {
             return (char) ('0' + number);
         }
 
